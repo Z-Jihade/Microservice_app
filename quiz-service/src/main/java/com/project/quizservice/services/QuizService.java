@@ -1,7 +1,10 @@
 package com.project.quizservice.services;
 
 
+import com.project.quizservice.entities.QuestionWrapper;
 import com.project.quizservice.entities.Quiz;
+import com.project.quizservice.entities.Response;
+import com.project.quizservice.feign.QuizInterface;
 import com.project.quizservice.repositories.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,20 +17,35 @@ import java.util.List;
 @Service
 public class QuizService {
 
-   @Autowired
-   private QuestionService questionService;
+    @Autowired
+    QuizRepository quizDao;
 
-   private QuizRepository quizRepository;
+    @Autowired
+    QuizInterface quizInterface;
 
-   public ResponseEntity<String> createQuiz(String categoryName, Integer numQuestions, String title) {
-       List<Integer> ids = questionService.getQuestionsForQuiz(categoryName, numQuestions);
-       Quiz quiz = new Quiz();
-       quiz.setTitle(title);
-       quiz.setQuestionIds(ids);
-       quizRepository.save(quiz);
-   }
+
+    public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
+
+        List<Integer> questions = quizInterface.getQuestionsForQuiz(category, numQ).getBody();
+        Quiz quiz = new Quiz();
+        quiz.setTitle(title);
+        quiz.setQuestionIds(questions);
+        quizDao.save(quiz);
+
+        return new ResponseEntity<>("Success", HttpStatus.CREATED);
+
+    }
 
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer id) {
+        Quiz quiz = quizDao.findById(id).get();
+        List<Integer> questionIds = quiz.getQuestionIds();
+        ResponseEntity<List<QuestionWrapper>> questions = quizInterface.getQuestionsFromId(questionIds);
+        return questions;
 
+    }
+
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> responses) {
+        ResponseEntity<Integer> score = quizInterface.getScore(responses);
+        return score;
     }
 }

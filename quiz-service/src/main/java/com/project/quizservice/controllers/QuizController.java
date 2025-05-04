@@ -15,7 +15,7 @@ public class QuizController {
     @Autowired
     QuizService quizService;
 
-    @PostMapping("create")
+   /* @PostMapping("create")
     public ResponseEntity<String> createQuiz(@RequestBody QuizDto quizDto){
         return quizService.createQuiz(quizDto.getCategoryName(), quizDto.getNumQuestions(), quizDto.getTitle());
     }
@@ -28,7 +28,7 @@ public class QuizController {
     @PostMapping("submit/{id}")
     public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<Response> responses){
         return quizService.calculateResult(id, responses);
-    }
+    }*/
 
 
 
