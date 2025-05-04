@@ -6,6 +6,7 @@ import com.project.questionservice.entities.Question;
 import com.project.questionservice.entities.QuestionWrapper;
 import com.project.questionservice.entities.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.project.questionservice.services.QuestionService;
@@ -18,6 +19,8 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    Environment environment;
 
     @GetMapping("allQuestions")
     public ResponseEntity<List<Question>> getAllQuestions(){
@@ -43,6 +46,7 @@ public class QuestionController {
     // getQuestions (questionid)
     @PostMapping("getQuestionsByIds")
     public ResponseEntity<List<QuestionWrapper>> generateQuestionsByIds(@RequestBody List<Integer> questionIds){
+        System.out.println(environment.getProperty("local.server.port"));
         return questionService.generateQuestionsByIds(questionIds);
     }
     // getScore
