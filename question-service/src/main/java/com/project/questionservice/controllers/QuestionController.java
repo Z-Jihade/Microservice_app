@@ -37,16 +37,16 @@ public class QuestionController {
     }
     // generate
     @GetMapping("generate")
-    public ResponseEntity<List<Integer>> generateQuestionsForQuiz(@RequestParam String category, @RequestParam int numQuestions){
-        return questionService.getQuestionsForQuiz(category, numQuestions);
+    public ResponseEntity<List<Integer>> generateQuestionsForQuiz(@RequestParam String categoryName, @RequestParam int numQuestions){
+        return questionService.getQuestionsForQuiz(categoryName, numQuestions);
     }
     // getQuestions (questionid)
-    @GetMapping("getQuestionsByIds")
+    @PostMapping("getQuestionsByIds")
     public ResponseEntity<List<QuestionWrapper>> generateQuestionsByIds(@RequestBody List<Integer> questionIds){
         return questionService.generateQuestionsByIds(questionIds);
     }
     // getScore
-    @GetMapping("getScore")
+    @PostMapping("getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses){
         return questionService.getScore(responses);
     }
