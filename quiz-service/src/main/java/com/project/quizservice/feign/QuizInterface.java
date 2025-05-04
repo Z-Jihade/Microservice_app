@@ -17,7 +17,7 @@ public interface QuizInterface {
     public ResponseEntity<List<Integer>> getQuestionsForQuiz
             (@RequestParam String categoryName, @RequestParam Integer numQuestions );
 
-    @PostMapping("question/getQuestions")
+    @PostMapping("question/getQuestionsByIds")
     public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds);
 
     @PostMapping("question/getScore")

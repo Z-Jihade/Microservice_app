@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuizService {
@@ -37,7 +38,11 @@ public class QuizService {
     }
 
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer id) {
-        Quiz quiz = quizDao.findById(id).get();
+        Optional<Quiz> quizOptional = quizDao.findById(id);
+        if (!quizOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Quiz quiz = quizOptional.get();
         List<Integer> questionIds = quiz.getQuestionIds();
         ResponseEntity<List<QuestionWrapper>> questions = quizInterface.getQuestionsFromId(questionIds);
         return questions;
